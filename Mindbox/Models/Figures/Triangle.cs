@@ -1,8 +1,9 @@
 using System;
 using System.Linq;
 using Mindbox.Interfaces;
+using Mindbox.Models.Figures.Exceptions;
 
-namespace Mindbox.Figures
+namespace Mindbox.Models.Figures
 {
     public class Triangle : ITriangle
     {
@@ -13,19 +14,21 @@ namespace Mindbox.Figures
 
         public Triangle(double[] sides)
         {
-            if (sides.Count() < 3)
+            if (sides.Count() != 3)
             {
-                throw new Exception("Triangle must have 3 sides");
+                throw new FigureCreationException("Triangle must have 3 sides");
             }
 
-            TriangleInitialization(sides);
+            TriangleInitialization(ref sides);
         }
 
-        private void TriangleInitialization(double[] sides)
+        private void TriangleInitialization(ref double[] sides)
         {
-            if (sides.Any(x => x <= 0))
+            var maxSide = sides.Max();
+
+            if (maxSide >= sides.Sum() - maxSide)
             {
-                throw new Exception("Triangle must have none zero sides");
+                throw new FigureCreationException("Triangle do not exists");
             }
 
             _sides = sides;
@@ -33,15 +36,15 @@ namespace Mindbox.Figures
 
         public double GetArea()
         {
-            var hP = _sides.Sum()/2;
-            double temp = 0;
+            var hP = _sides.Sum() / 2;
+            double temp = 1;
 
             foreach (var i in _sides)
             {
-                temp*= hP - i;
+                temp *= hP - i;
             }
 
-            return Math.Sqrt(hP*temp);
+            return Math.Sqrt(hP * temp);
         }
 
         public bool IsSquare()

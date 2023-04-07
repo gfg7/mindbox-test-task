@@ -1,7 +1,8 @@
 using System;
 using Mindbox.Interfaces;
+using Mindbox.Models.Figures.Exceptions;
 
-namespace Mindbox.Figures
+namespace Mindbox.Models.Figures
 {
     public class Circle : IBaseFigure
     {
@@ -9,9 +10,9 @@ namespace Mindbox.Figures
         public double Radius { get => _radius; init => _radius = value; }
         public Circle(double radius)
         {
-            if (_radius <= 0)
+            if (radius <= 0)
             {
-                throw new Exception("Circle's radius must not be zero or negative");
+                throw new FigureCreationException("Circle's radius must not be zero or negative");
             }
 
             _radius = radius;
